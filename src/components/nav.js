@@ -1,73 +1,40 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 
-class Nav extends Component {
+
+export class MyNav extends Component {
     constructor(props) {
         super(props);
-
+    
+        this.toggle = this.toggle.bind(this);
         this.state = {
-            menuGroups:
-            {
-                products: [{
-                    url: "#1",
-                    linkText: "item1"
-                },
-                {
-                    url: "#2",
-                    linkText: "item2"
-                }
-                ]
-            }
-
+          isOpen: false
         };
-    }
-
-    componentDidMount() {
-        axios.get("#navendpoint")
-            .then(response => {
-                this.setState({
-                    menuGroups: response
-                });
-            });
-    };
-    render() {
+      }
+      toggle() {
+        this.setState({
+          isOpen: !this.state.isOpen
+        });
+      }
+      render() {
         return (
-            <MenuGroup menuGroup={this.state.menuGroups.products} />
+          <div>
+            <Navbar color="dark" light expand="md">
+              <NavbarBrand href="/">Evestment</NavbarBrand>
+              <NavbarToggler onClick={this.toggle} />
+              <Collapse isOpen={this.state.isOpen} navbar>
+                <Nav className="ml-auto" navbar>
+                  <NavItem>
+                    <NavLink href="/components/">Components</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink href="https://github.com/reactstrap/reactstrap">Github</NavLink>
+                  </NavItem>
+                </Nav>
+              </Collapse>
+            </Navbar>
+          </div>
         );
-    }
-
+      }
 }
-
-class MenuGroup extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            menuGroup: props.menuGroup
-        };
-    }
-
-    render() {
-        return (
-            <div>
-                <MenuItem url={this.state.menuGroup[0].url}
-                    linkText={this.state.menuGroup[0].linkText} />
-                <MenuItem url={this.state.menuGroup[1].url}
-                    linkText={this.state.menuGroup[1].linkText} />
-            </div>
-        );
-    }
-}
-
-class MenuItem extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { url: props.url, linkText: props.linkText };
-    }
-    render() {
-        return (
-            <li>{this.state.linkText}</li>
-        );
-    }
-}
-export default Nav;
